@@ -97,10 +97,11 @@ module Mongoid
         instance_eval <<-CODE
           def self.find_by_#{slug_name}(slug)
             if slug_history_name
-              any_of({ slug_name => slug }, { slug_history_name => slug })
+              where({ slug_name => slug }).first ||
+                where({ slug_history_name => slug }).first
             else
-              where(slug_name => slug)
-            end.first
+              where(slug_name => slug).first
+            end
           end
 
           def self.find_by_#{slug_name}!(slug)
